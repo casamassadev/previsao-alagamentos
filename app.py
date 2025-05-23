@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-import matplotlib.pyplot as plt
 from datetime import datetime
 
 # Dicionário para meses em português
@@ -52,7 +51,13 @@ climas = dados["weathercode"][:6]
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader(f"📅 Hoje – {datas[0]}")
+    # Formata a data de hoje para mostrar no título
+    data_hoje_obj = datetime.strptime(datas[0], "%Y-%m-%d")
+    data_hoje_formatada = data_hoje_obj.strftime("%d de %B de %Y")
+    for en, pt in meses_pt.items():
+        data_hoje_formatada = data_hoje_formatada.replace(en, pt)
+    
+    st.subheader(f"📅 Hoje – {data_hoje_formatada}")
     st.markdown(f"**🌡️ Temperatura máxima:** {temperaturas[0]} °C")
     st.markdown(f"**🌧️ Precipitação prevista:** {chuvas[0]} mm")
     st.markdown(f"**Clima:** {emoji_tempo(climas[0])}")
@@ -60,13 +65,16 @@ with col1:
 with col2:
     st.subheader("📆 Próximos 5 dias")
     for i in range(1, 6):
-        st.markdown(f"**{datas[i]}**")
+        data_obj = datetime.strptime(datas[i], "%Y-%m-%d")
+        data_formatada = data_obj.strftime("%d/%m/%Y")
+        st.markdown(f"**{data_formatada}**")
         st.markdown(f"{emoji_tempo(climas[i])}  {temperaturas[i]}°C, {chuvas[i]} mm")
         st.markdown("---")
 
 st.subheader("🌊 Avaliação de risco de alagamento")
 for i in range(6):
-    data_formatada = datetime.strptime(datas[i], "%Y-%m-%d").strftime("%d de %B de %Y")
+    data_obj = datetime.strptime(datas[i], "%Y-%m-%d")
+    data_formatada = data_obj.strftime("%d de %B de %Y")
     for en, pt in meses_pt.items():
         data_formatada = data_formatada.replace(en, pt)
     risco = avaliar_risco(chuvas[i])
