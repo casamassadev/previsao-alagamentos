@@ -37,7 +37,7 @@ def avaliar_risco(chuva_mm, limite=30):
 
 # Layout do Streamlit
 st.set_page_config(layout="wide")
-st.title("🌧️ Previsão do Tempo + Alagamentos – Valinhos/SP")
+st.title("🌧️ Previsão do Tempo + Alagamento na Av Invernada – Valinhos/SP")
 
 dados = pegar_previsao()
 
@@ -66,6 +66,6 @@ with col2:
 # ABAIXO: RISCOS DE ALAGAMENTO
 st.subheader("🌊 Avaliação de risco de alagamento")
 for i in range(6):
-    data_formatada = datetime.strptime(datas[i], "%Y-%m-%d").strftime("%d/%m/%Y")
+    data_formatada = datetime.strptime(datas[i], "%Y-%m-%d").strftime("%d de %B de %Y")
     risco = avaliar_risco(chuvas[i])
     st.write(f"📅 {data_formatada} → {chuvas[i]} mm → {risco}")
